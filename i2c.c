@@ -8,27 +8,29 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <propeller2.h>
+#include <propeller.h>
 #include "i2c.h"
 
 
 i2c_t *I2C_Init(int scl, int sda, int spd)
 {
-    int i;
+    unsigned int i;
     i2c_t *x;
 
 	i = 10;
-    x = malloc(sizeof(int));
+    x = malloc(sizeof(i2c_t));
     if (spd == I2C_STD)
-    	i = 10;
+    	i = 10 * _clkfreq / 1000000;
     if (spd == I2C_FAST)
-    	i = 2;
+    	i = 2 * _clkfreq / 1000000;
     if (spd == I2C_FASTP)
-    	i = 1;
+    	i = 1 * _clkfreq / 1000000;
     if (spd == I2C_HIGH)
-    	i = 0;
-    i = scl | (sda << 8) | (i << 16);
-    *x = (i2c_t)i;
+    	i = 1;
+    x->wait = i;
+    x->clk = scl;
+    x->dta = sda;
+
     I2C_Stop(x);
     return x;
 }
@@ -45,71 +47,67 @@ int I2C_Poll(i2c_t *x, int address)
 void I2C_Start(i2c_t *x)
 {
     int s, c, d;
-    int i;
+
+    s = x->wait;
+    d = x->dta;
+    c = x->clk;
     
-    i = (int)*x;
-    s = i >> 16;
-    d = (i >> 8) & 0xff;
-    c = i &0xff;
-    
-    _pinh(d);
+    pinh(d);
 //    _waitus(s);
-    _pinh(c);
-    _waitus(s);
-    _pinl(d);
-    _waitus(s);
-    _pinl(c);
-    _waitus(s);
+    pinh(c);
+    waitx(s);
+    pinl(d);
+    waitx(s);
+    pinl(c);
+    waitx(s);
 }
 
 void I2C_Stop(i2c_t *x)
 {
     int s, c, d;
-    int i;
     
-    i = (int)*x;
-    s = i >> 16;
-    d = (i >> 8) & 0xff;
-    c = i &0xff;
+    s = x->wait;
+    d = x->dta;
+    c = x->clk;
 
-    _pinl(c);
-    _pinl(d);
-    _waitus(s);
-    _pinh(c);
-    _waitus(s);
-    _pinh(d);
-    _waitus(s);
+    pinl(c);
+    pinl(d);
+    waitx(s);
+    pinh(c);
+    waitx(s);
+    pinh(d);
+    waitx(s);
 }
 
 int I2C_WriteByte(i2c_t *x, int b)
 {
-    int s, c, d;
-    int i;
+    int s, c, d, i;
     
-    i = (int)*x;
-    s = i >> 16;
-    d = (i >> 8) & 0xff;
-    c = i &0xff;
+    s = x->wait;
+    d = x->dta;
+    c = x->clk;
+    i = 8;
 
-    for (i=0;i<8;i++)
-    {
-        if (b & 0x80)
-        	_dirl(d); // float pin
-        else
-        	_dirh(d); // enable out
-        _waitus(s);
-        _pinh(c);
-        _waitus(s);
-        b = b << 1;
-        _pinl(c);
-    }
-	_dirl(d); // float answer
-    _waitus(s);
-	_pinh(c);
-	_waitus(s);
-	d = _pinr(d); //ACK=low
-	_pinl(c);
-	_waitus(s);
+    asm ("shl %[b], #24\n"
+        "_isnd: rcl %[b], #1 wc\n"
+        "if_c dirl %[d]\n"
+        "if_nc dirh %[d]\n"
+        "waitx %[s]\n"
+        "drvh %[c]\n"
+        "waitx %[s]\n"
+        "drvl %[c]\n"
+        "djnz %[i], #_isnd\n"
+        "dirl %[d]\n"
+        "waitx %[s]\n"
+        "drvh %[c]\n"
+        "waitx %[s]\n"
+        "testp %[d] wc\n"
+        "wrc %[d]\n"
+        "drvl %[c]\n"
+        "waitx %[s]\n"
+        :[d]"+r"(d),[i]"+r"(i), [b]"+r"(b)
+        :[c]"r"(c), [s]"r"(s));
+
 	return d;
 }
 
@@ -117,37 +115,36 @@ int I2C_WriteByte(i2c_t *x, int b)
 unsigned char I2C_ReadByte(i2c_t *x, int ack)
 {
     int s, c, d;
-    int b;
-    int i;
+    int b, i;
     
-    i = (int)*x;
-    s = i >> 16;
-    d = (i >> 8) & 0xff;
-    c = i &0xff;
+    s = x->wait;
+    d = x->dta;
+    c = x->clk;
+    i = 8;
+    b = 0;
 
-	_dirl(d);
-    _waitus(s);
+    asm("dirl %[d]\n"
+        "waitx %[s]\n"
+        "mov %[b], #0\n"
+        "_ird: shl %[b], #1\n"
+        "drvh %[c]\n"
+        "waitx %[s]\n"
+        "testp %[d] wc\n"
+        "if_c or %[b], #1\n"
+        "drvl %[c]\n"
+        "waitx %[s]\n"
+        "djnz %[i], #_ird\n"
+        "cmp %[ack], #1 wz\n"
+        "if_z dirl %[d]\n"
+        "if_nz dirh %[d]\n"
+        "waitx %[s]\n"
+        "drvh %[c]\n"
+        "waitx %[s]\n"
+        "drvl %[c]\n"
+        "waitx %[s]\n"
+        :[b]"+r"(b), [i]"+r"(i)
+        :[d]"r"(d), [s]"r"(s), [c]"r"(c), [ack]"r"(ack));
 
-	b = 0;
-	for (i=0;i<8;i++)
-	{
-	    b = b << 1;
-	    _pinh(c);
-	    _waitus(s);
-	    b = b | _pinr(d);
-	    _pinl(c);
-	    _waitus(s);
-	}
-	
-	if (ack)
-		_dirl(d);
-	else
-		_dirh(d);
-    _waitus(s);
-	_pinh(c);
-	_waitus(s);
-	_pinl(c);
-	_waitus(s);
 	return b;
 }
 
@@ -177,13 +174,14 @@ int I2C_ReadData(i2c_t *x, unsigned char *data, int count)
     return i;
 }
 
-int I2C_In(i2c_t *x, int address, int reg, int size, unsigned char *data, int count)
+int I2C_In(i2c_t *x, unsigned address, unsigned reg, unsigned size, unsigned char *data, int count)
 {
     int i;
     unsigned char buffer[4];
 
     address = address << 1;
     address = address & 0xfe;
+
     I2C_Start(x);
     if (I2C_WriteByte(x, address))
 	    return 0;
@@ -202,7 +200,7 @@ int I2C_In(i2c_t *x, int address, int reg, int size, unsigned char *data, int co
     return i;
 }
 
-int I2C_Out(i2c_t *x, int address, int reg, int size, unsigned char *data, int count)
+int I2C_Out(i2c_t *x, unsigned  address, unsigned reg, unsigned size, unsigned char *data, int count)
 {
     int i;
     unsigned char buffer[4];

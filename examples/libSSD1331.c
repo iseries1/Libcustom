@@ -20,9 +20,9 @@
 
 int main()
 {
-  _wait(1000);
+  wait(1000);
   printf("Starting\n");
-  _wait(1000);
+  wait(1000);
   
   SSD1331_init(OLEDDIN, OLEDCLK, OLEDCS, OLEDDC, OLEDRST);
 
@@ -34,19 +34,19 @@ int main()
   
   SSD1331_drawBox(10, 15, 95, 55, SSD1331_color(0, 255, 0));
   
-//  _wait(5000);
+//  wait(5000);
   
 //  SSD1331_scrollRight(1, 0, 63, 1);
   
-//  _wait(5000);
+//  wait(5000);
  
 //  SSD1331_scrollStop();
   
   //print("Done\n");
-  _pinl(56);
+  pinl(56);
   
   while(1)
   {
-      _wait(1000);
+      wait(1000);
   }  
 }

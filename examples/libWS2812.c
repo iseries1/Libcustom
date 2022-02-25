@@ -23,8 +23,8 @@ int main()
   int x;
   
   printf("Starting\n");
-  _dirh(57);
-  _pinh(57);
+  dirh(57);
+  pinh(57);
 
   c[0] = COLOR(32,0,0);
   c[1] = COLOR(0,32,0);
@@ -42,7 +42,7 @@ int main()
     }
     x++;
     ws2812_set(WSLED, ledColors, LED_COUNT);
-    _wait(1000);
+    wait(1000);
   }
  
   for (int i=0;i<LED_COUNT;i++)
@@ -54,6 +54,6 @@ int main()
   
   while(1)
   {
-    _wait(1000);
+     wait(1000);
   }  
 }

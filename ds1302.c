@@ -33,7 +33,7 @@ void DS1302_open(int mosi, int cs, int sclk, int miso)
   _CS = cs;
   _MOSI = mosi;
   _MISO = miso;
-  _pinl(_CS);
+  pinl(_CS);
   memset(_Msg, 0, sizeof(_Msg));
   _AMPM = -1;
 }
@@ -270,12 +270,12 @@ int DS1302_read(int control)
 {
   int i;
   
-  _pinh(_CS);
+  pinh(_CS);
   //shift_out(_MISO, _SCLK, LSBFIRST, 8, control);
   spi_out(_MISO, _SCLK, 8, control);
   //i = shift_in(_MOSI, _SCLK, LSBPRE, 8);
   i = spi_in(_MOSI, _SCLK, 8);
-  _pinl(_CS);
+  pinl(_CS);
   return i;
 }
 
@@ -286,19 +286,19 @@ int DS1302_read(int control)
 void DS1302_write(int control, int data)
 {
   
-  _pinh(_CS);
+  pinh(_CS);
   //shift_out(_MISO, _SCLK, LSBFIRST, 8, control-1);
   spi_out(_MISO, _SCLK, 8, control-1);
   //shift_out(_MISO, _SCLK, LSBFIRST, 8, data);
   spi_out(_MISO, _SCLK, 8, data);
-  _pinl(_CS);
+  pinl(_CS);
 }
 
 void DS1302_setMessage(char *msg)
 {
   int i;
 
-  _pinh(_CS);
+  pinh(_CS);
   //shift_out(_MISO, _SCLK, LSBFIRST, 8, DS1302BURSTMM-1);
   spi_out(_MISO, _SCLK, 8, DS1302BURSTMM-1);
   for (i=0;i<31;i++)
@@ -306,14 +306,14 @@ void DS1302_setMessage(char *msg)
     //shift_out(_MISO, _SCLK, LSBFIRST, 8, msg[i]);
     spi_out(_MISO, _SCLK, 8, msg[i]);
   }    
-  _pinl(_CS);
+  pinl(_CS);
 }
 
 char *DS1302_getMessage()
 {
   int i;
   
-  _pinh(_CS);
+  pinh(_CS);
   //shift_out(_MISO, _SCLK, LSBFIRST, 8, DS1302BURSTMM);
   spi_out(_MISO, _SCLK, 8, DS1302BURSTMM);
   for (i=0;i<31;i++)
@@ -321,26 +321,26 @@ char *DS1302_getMessage()
     //_Msg[i] = shift_in(_MOSI, _SCLK, LSBPRE, 8);
     _Msg[i] = spi_in(_MOSI, _SCLK, 8);
   }    
-  _pinl(_CS);
+  pinl(_CS);
   return _Msg;
 }
 
 void spi_out(int mosi, int sclk, int len, int data)
 {
-  _pinh(mosi);
-  _pinl(sclk);
-  _waitus(1);
+  pinh(mosi);
+  pinl(sclk);
+  waitus(1);
   for (int i=0;i<len;i++)
   {
     if ((data & 0x01) == 1)
-      _pinh(mosi);
+      pinh(mosi);
     else
-      _pinl(mosi);
-    _waitus(1);
-    _pinnot(sclk);
-    _waitus(1);
-    _pinnot(sclk);
-    _waitus(1);
+      pinl(mosi);
+    waitus(1);
+    pinnot(sclk);
+    waitus(1);
+    pinnot(sclk);
+    waitus(1);
     data = data >> 1;
   }
 }
@@ -350,16 +350,16 @@ int spi_in(int miso, int sclk, int len)
   int data;
 
   data = 0;
-  _dirl(miso);
-  _pinl(sclk);
-  _waitus(1);
+  dirl(miso);
+  pinl(sclk);
+  waitus(1);
   for (int i=0;i<len;i++)
   {
-    data = data | (_pinr(miso) << i);
-    _pinnot(sclk);
-    _waitus(1);
-    _pinnot(sclk);
-    _waitus(1);
+    data = data | (pinr(miso) << i);
+    pinnot(sclk);
+    waitus(1);
+    pinnot(sclk);
+    waitus(1);
   }
   return data;
 }

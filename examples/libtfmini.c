@@ -30,6 +30,6 @@ int main()
     s = tfmini_strength();
     t = tfmini_temperature();
     printf("Distance: %d, Strength: %d, Temp: %d\n", d, s, t);
-    _waitms(1000);    
+    waitms(1000);    
   }  
 }

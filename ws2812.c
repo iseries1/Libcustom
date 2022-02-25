@@ -15,13 +15,13 @@ void ws2812_set(int pin, unsigned long *leds, int num)
     unsigned long color;
     unsigned int w;
     int bits;
-    short H, L;
+    int H, L;
 
     H = _clkfreq/1111111; // 90nsec (1250000 80ns)
     L = _clkfreq/2857143; // 35nsec (2500000 40ns)
 
-    _dirh(pin);
-    _pinl(pin);
+    dirh(pin);
+    pinl(pin);
 
     for (int i=0;i<num;i++)
     {

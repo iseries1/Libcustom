@@ -694,19 +694,19 @@ int epaper_init(char din, char clk, char cs, char dc, char rst, char busy)
   _Dmask = ~_DMask;
   _Cmask = ~_CMask;
   
-  _pinh(_DIN);
-  _pinl(_CLK);
-  _pinh(_DC);
-  _dirl(_BUSY);
+  pinh(_DIN);
+  pinl(_CLK);
+  pinh(_DC);
+  dirl(_BUSY);
   
-  _pinl(_CS);
-  _pinl(_RST);
-  _wait(200);
-  _pinh(_RST);
-  _wait(200);
+  pinl(_CS);
+  pinl(_RST);
+  wait(200);
+  pinh(_RST);
+  wait(200);
   
-  while (_pinr(_BUSY) == 1)
-    _wait(1);
+  while (pinr(_BUSY) == 1)
+    wait(1);
   
   writeCmd(EPAPER_DRVOUT); // 296
   spi_outM(8, 295);
@@ -734,25 +734,25 @@ int epaper_init(char din, char clk, char cs, char dc, char rst, char busy)
   for (int i=0;i<30;i++)
     spi_outM(8, lut[i]);
   
-  while (_pinr(_BUSY) == 1)
-    _wait(1);
+  while (pinr(_BUSY) == 1)
+    wait(1);
 
-  _pinh(_CS);
+  pinh(_CS);
   
   return id;
 }
 
 void epaper_sleep(char sleep)
 {
-  _pinl(_CS);
+  pinl(_CS);
   writeCmd(EPAPER_DEPSLP);
   spi_outM(8, sleep & 0x01);
-  _pinh(_CS);
+  pinh(_CS);
 }
 
 void epaper_update()
 {
-  _pinl(_CS);
+  pinl(_CS);
   
   writeCmd(EPAPER_SRAMX);
   spi_outM(8, 0);
@@ -771,8 +771,8 @@ void epaper_update()
   spi_outM(8, 0);
   spi_outM(8, 0);
   
-  while (_pinr(_BUSY) == 1)
-    _wait(1);
+  while (pinr(_BUSY) == 1)
+    wait(1);
 
   writeCmd(EPAPER_WRAM);
   for (int i=0;i<4736;i++)
@@ -784,12 +784,12 @@ void epaper_update()
   spi_outM(8, 0xC4);
   
   writeCmd(EPAPER_MASTER);
-  while (_pinr(_BUSY) == 1)
-    _wait(1);
+  while (pinr(_BUSY) == 1)
+    wait(1);
   
   writeCmd(EPAPER_NOP);
   
-  _pinh(_CS);
+  pinh(_CS);
   
 
 }
@@ -1027,22 +1027,22 @@ void epaper_drawBox(short x, short y, short x1, short y1, char c)
 // low level functions
 void writeCmd(int cmd)
 {
-  _pinl(_DC);
+  pinl(_DC);
   spi_outM(8, cmd); //shift_out(_DIN, _CLK, MSBFIRST, 8, cmd);
-  _pinh(_DC);
+  pinh(_DC);
 }
 
 int readCmd(int cmd)
 {
   int r;
   
-  _pinl(_DC);
-  _pinl(_CS);
+  pinl(_DC);
+  pinl(_CS);
   spi_outM(8, cmd); //shift_out(_DIN, _CLK, MSBFIRST, 8, cmd);
   
-  _pinh(_DC);
+  pinh(_DC);
   
-  _pinh(_CS);
+  pinh(_CS);
   
   return r;
 }
@@ -1055,16 +1055,16 @@ void spi_outM(int len, int data)
 
     data = data << (32 - len);
     
-    _pinh(_DIN);
-    _pinl(_CLK);
+    pinh(_DIN);
+    pinl(_CLK);
     for (int i=0;i<len;i++)
     {
         if ((data & 0x80000000) == 0)
-        	_pinl(_DIN);
+        	pinl(_DIN);
         else
-        	_pinh(_DIN);
-        _pinh(_CLK);
-        _pinl(_CLK);
+        	pinh(_DIN);
+        pinh(_CLK);
+        pinl(_CLK);
         data = data << 1;
 	}
 }

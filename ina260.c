@@ -6,7 +6,7 @@
  * 
 */
 
-#include <propeller2.h>
+#include <propeller.h>
 #include "i2c.h"
 #include "ina260.h"
 
@@ -16,6 +16,7 @@ void _readBytes(unsigned char , unsigned char , unsigned char *);
 
 unsigned char _INA260;
 i2c_t *_INA260C;
+//i2c *_INA260C;
 
 unsigned short INA260_open(char clock, char data)
 {
@@ -24,6 +25,7 @@ unsigned short INA260_open(char clock, char data)
   _INA260 = INA260_I2CADDR;
 
   _INA260C = I2C_Init(clock, data, I2C_STD);
+  //_INA260C = i2c_newbus(clock, data, 0);
   
   id = _readWord(INA260_MFGID);
   return id;
@@ -117,6 +119,8 @@ void _writeWord(unsigned char reg, unsigned short data)
   v[1] = data;
   
   I2C_Out(_INA260C, _INA260, reg, 1, v, 2);
+  //i2c_out(_INA260C, _INA260, reg, 1, v, 2);
+  
 }
 
 /**
@@ -128,11 +132,11 @@ unsigned short _readWord(unsigned char reg)
 {
   unsigned short v;
   unsigned char data[2];
-  
+
   I2C_In(_INA260C, _INA260, reg, 1, data, 2);
+  //i2c_in(_INA260C, _INA260, reg, 1, data, 2);
   
-  v = data[0] << 8 | data[1];
-  
+  v = (data[0] << 8) | data[1];
   return v;
 }
 
@@ -145,4 +149,5 @@ unsigned short _readWord(unsigned char reg)
 void _readBytes(unsigned char reg, unsigned char cnt, unsigned char *dest)
 {
   I2C_In(_INA260C, _INA260, reg, 1, dest, cnt);
+  //i2c_in(_INA260C, _INA260, reg, 1, dest, cnt);
 }

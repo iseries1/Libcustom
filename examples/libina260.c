@@ -6,7 +6,7 @@
  * 
 */
 
-#include <propeller2.h>
+#include <propeller.h>
 #include <stdio.h>
 #include "Custom/ina260.h"
 
@@ -42,7 +42,7 @@ int main()
   
   while(1)
   {
-    _wait(1000);
+    wait(1000);
     i = INA260_getCurrent();
     printf("Current: %d  ", i);
     i = INA260_getVoltage();

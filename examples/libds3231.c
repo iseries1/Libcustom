@@ -34,6 +34,6 @@ int main()
     	time(&tm);
     	i = DS3231_Temperature();
     	printf("Temp %d, Date: %s", i, asctime(localtime(&tm)));
-        _wait(1000);
+        wait(1000);
 	}
 }

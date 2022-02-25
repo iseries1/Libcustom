@@ -9,9 +9,8 @@
 #include "lcd1602.h"
 #include "LCD1602reg.h"
 #include <propeller.h>
-#include "simpletools.h"
 
-int LCD1602_Read(int);
+int LCD1602_Read(void);
 int LCD1602_Write(int);
 void LCD1602_Nible(int);
 void LCD1602_Send(int, int);
@@ -28,14 +27,14 @@ int LCD1602_Open(int clk, int dta)
     pbus = i2c_open(&Bus, clk, dta, 0);
     backlight = 0;
     LCD1602_Write(0x00);
-    _waitms(1000);
+    waitms(1000);
     
     LCD1602_Nible(0x30);
-    _waitus(4500);
+    waitus(4500);
     LCD1602_Nible(0x30);
-    _waitus(4500);
+    waitus(4500);
     LCD1602_Nible(0x30);
-    _waitus(150);
+    waitus(150);
     LCD1602_Nible(0x20);
     
     LCD1602_Function(0,1,0);
@@ -50,13 +49,13 @@ int LCD1602_Open(int clk, int dta)
 void LCD1602_Clear()
 {
     LCD1602_Send(LCD1602_CLEAR, 0);
-    _waitms(2);
+    waitms(2);
 }
 
 void LCD1602_Home()
 {
     LCD1602_Send(LCD1602_HOME, 0);
-    _waitms(2);
+    waitms(2);
 }
 
 void LCD1602_Display(int display, int cursor, int blink)
@@ -145,9 +144,9 @@ void LCD1602_Nible(int n)
 {
     LCD1602_Write(n | backlight);
     LCD1602_Write(n | LCD1602_ENABLE | backlight);
-    _waitus(1);
+    waitus(1);
     LCD1602_Write(n | backlight);
-    _waitus(50);
+    waitus(50);
 }
 
 void LCD1602_Send(int value, int mode)

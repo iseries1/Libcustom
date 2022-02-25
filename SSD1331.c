@@ -7,11 +7,10 @@
 */
 
 #include <propeller.h>
-#include <stdio.h>
 #include "SSD1331.h"
 #include "SSD1331reg.h"
 
-void shift_out(int, int, int, int);
+void _Shift_out(int, int, int, int);
 void SSD1331_cmd(unsigned char);
 void SSD1331_write(unsigned char);
 
@@ -675,15 +674,15 @@ void SSD1331_init(char din, char clk, char cs, char dc, char res)
   _DC = dc;
   _RES = res;
   
-  _pinl(_RES);
-  _wait(100);
-  _pinh(_RES);
-  _wait(100);
-  _pinl(_RES);
-  _wait(100);
-  _pinh(_RES);
+  pinl(_RES);
+  wait(100);
+  pinh(_RES);
+  wait(100);
+  pinl(_RES);
+  wait(100);
+  pinh(_RES);
   
-  _pinl(_CS);
+  pinl(_CS);
   SSD1331_cmd(SSD1331_DISPLAYOFF); //reset has display off
   SSD1331_cmd(SSD1331_SETREMAP);
   SSD1331_cmd(0x60);
@@ -761,7 +760,7 @@ void SSD1331_cls()
   SSD1331_cmd(TFTWIDTH-1); // x
   SSD1331_cmd(TFTHEIGHT-1); // y
   
-  _wait(25);
+  wait(25);
 }
 
 void SSD1331_invert(short i)
@@ -870,7 +869,7 @@ void SSD1331_writeSChar(char x, char y, char c)
   for (int l=0;l<2;l++)
   {
     v = Font_57[t++];
-    printf("%x ", v);
+
     for (int i=0;i<4;i++)
     {
       for (int j=0;j<8;j++)
@@ -1052,9 +1051,9 @@ void SSD1331_scrollStop(void)
  */
 void SSD1331_cmd(unsigned char cmd)
 {
-  _pinl(_DC);
+  pinl(_DC);
   SSD1331_write(cmd);
-  _pinh(_DC);
+  pinh(_DC);
 }
 
 /* @brief write data
@@ -1062,24 +1061,24 @@ void SSD1331_cmd(unsigned char cmd)
  */
 void SSD1331_write(unsigned char data)
 {
-  shift_out(_DIN, _CLK, 8, data);
+  _Shift_out(_DIN, _CLK, 8, data);
 }
 
-void shift_out(int pinDat, int pinClk, int bits, int value)
+void _Shift_out(int pinDat, int pinClk, int bits, int value)
 {
   int vi, vf, inc;
   vi = bits - 1;
   vf = -1;
   inc = -1;
-  _pinl(pinClk);
+  pinl(pinClk);
   for(int i = vi; i != vf; i += inc)
   {
     if ((value >> i) & 1)
-      _pinh(pinDat);
+      pinh(pinDat);
     else
-      _pinl(pinDat);
+      pinl(pinDat);
 
-    _pinnot(pinClk);
-    _pinnot(pinClk);
+    pinnot(pinClk);
+    pinnot(pinClk);
   }
 }

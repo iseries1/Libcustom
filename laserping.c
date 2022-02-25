@@ -44,21 +44,21 @@ void laserping_run(void *par)
   int bitperiod = (_clkfreq / 9600);
   int bit_mode;
 
-  _dirh(_Pin);
-  _pinl(_Pin);
-  _wait(250);
+  dirh(_Pin);
+  pinl(_Pin);
+  wait(250);
 
   // calculate smartpin mode for 8 bits per character
   bit_mode = 7 + (bitperiod << 16);
-  _pinstart(_Pin, P_OE | P_ASYNC_TX, bit_mode, 0);
+  pinstart(_Pin, P_OE | P_ASYNC_TX, bit_mode, 0);
 
-  _wypin(_Pin, 'I');
-  _wait(10);
-  _wypin(_Pin, 'I');
-  _wait(10);
+  wypin(_Pin, 'I');
+  wait(10);
+  wypin(_Pin, 'I');
+  wait(10);
 
-  _pinl(_Pin);
-  _pinstart(_Pin, P_ASYNC_RX, bit_mode, 0);
+  pinl(_Pin);
+  pinstart(_Pin, P_ASYNC_RX, bit_mode, 0);
 
   p = 0;
   t = 0;
@@ -66,10 +66,10 @@ void laserping_run(void *par)
   while (_RS)
   {
     do {
-      i = _pinr(_Pin);
+      i = pinr(_Pin);
     } while (i == 0);
 
-    c = _rdpin(_Pin) >> 24; // shift down to byte
+    c = rdpin(_Pin) >> 24; // shift down to byte
     if (c == 13)
     {
       _Buffer[p] = 0;
@@ -84,7 +84,7 @@ void laserping_run(void *par)
     if (p > 10)
       p = 0;
   }
-  _pinl(_Pin);
+  pinl(_Pin);
   //cogstop(cogid());
 }
 
@@ -93,14 +93,14 @@ void laserping_runp(void *par)
   int i;
   int t;
   
-  _pinl(_Pin);
+  pinl(_Pin);
   
   t = 0;
   _RS = 1;
   while (_RS)
   {
-    _wait(70);
-    _pinl(_Pin);
+    wait(70);
+    pinl(_Pin);
     PulseOut(_Pin, 5);
     i = PulseIn(_Pin, 1);
     _Average[t++] = i * 1715 / 10000;
@@ -128,16 +128,16 @@ void PulseOut(int p, int t)
 {
     int i;
     
-    i = _pinr(p);
+    i = pinr(p);
     if (i == 0)
-    	_pinh(p);
+    	pinh(p);
     else
-    	_pinl(p);
-    _waitus(t);
+    	pinl(p);
+    waitus(t);
     if (i == 0)
-    	_pinl(p);
+    	pinl(p);
     else
-    	_pinh(p);
+    	pinh(p);
 }
 
 // Get Pulse Length in microseconds
@@ -145,11 +145,11 @@ int PulseIn(int p, int s)
 {
     int i;
     
-    _dirl(p);
-    i = _getus();
-    while ((_pinr(p) != s) && ((_getus() - i) < 1000));
-    i = _getus();
-    while ((_pinr(p) == s) && ((_getus() - i) < 100000));
-    i = _getus() - i;
+    dirl(p);
+    i = getus();
+    while ((pinr(p) != s) && ((getus() - i) < 1000));
+    i = getus();
+    while ((pinr(p) == s) && ((getus() - i) < 100000));
+    i = getus() - i;
     return i;
 }

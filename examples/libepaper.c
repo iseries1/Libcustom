@@ -44,6 +44,6 @@ int main()
   
   while(1)
   {
-    _wait(1000);    
+    wait(1000);    
   }  
 }

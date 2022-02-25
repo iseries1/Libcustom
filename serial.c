@@ -57,11 +57,11 @@ FILE *serial_open(int rxpin, int txpin, int baudrate)
     
     // set up the transmit pin
     if (txpin >= 0)
-      _pinstart(txpin, P_OE | P_ASYNC_TX, bit_mode, 0);
+      pinstart(txpin, P_OE | P_ASYNC_TX, bit_mode, 0);
 
     // set up the receive pin
     if (rxpin >= 0)
-      _pinstart(rxpin, P_ASYNC_RX, bit_mode, 0);
+      pinstart(rxpin, P_ASYNC_RX, bit_mode, 0);
 
     return fp;
 }
@@ -77,9 +77,9 @@ int serial_close(FILE *device)
     tx_pin = i >> 8;
 
     if (tx_pin < 64)
-      _dirl(tx_pin);
+      dirl(tx_pin);
     if (rx_pin < 64)
-      _dirl(rx_pin);
+      dirl(rx_pin);
 
     device->_drv = 0;
 
@@ -93,7 +93,7 @@ int serial_rxReady(FILE *device)
 
     rx_pin = device->drvarg[0] >> 16;
     rx_pin = rx_pin & 0xff;
-    z = _pinr(rx_pin);
+    z = pinr(rx_pin);
     
     return z;
 }
@@ -106,11 +106,11 @@ int serial_rxCheck(FILE *device)
 
     rx_pin = device->drvarg[0] >> 16;
     rx_pin = rx_pin & 0xff;
-    z = _pinr(rx_pin);
+    z = pinr(rx_pin);
     if (z == 0)
       return -1;
     
-    rxbyte = _rdpin(rx_pin) >> 24; // shift down to byte
+    rxbyte = rdpin(rx_pin) >> 24; // shift down to byte
     rxbyte = rxbyte & 0xff;
     return rxbyte;
 }
@@ -124,10 +124,10 @@ int serial_rxChar(FILE *device)
     rx_pin = device->drvarg[0] >> 16;
     rx_pin = rx_pin & 0xff;
 
-    while ((z = _pinr(rx_pin)) == 0)
-	    _waitus(50);
+    while ((z = pinr(rx_pin)) == 0)
+	   waitus(50);
     
-	rxbyte = _rdpin(rx_pin) >> 24; // shift down to byte
+	rxbyte = rdpin(rx_pin) >> 24; // shift down to byte
 	rxbyte = rxbyte & 0xff;
 
 	return rxbyte;
@@ -141,14 +141,14 @@ int serial_txChar(FILE *device, unsigned char txbyte)
     tx_pin = device->drvarg[0] >> 16;
     tx_pin = tx_pin >> 8;
 
-    _wypin(tx_pin, txbyte);
+    wypin(tx_pin, txbyte);
 
     for (int i=0;i<100;i++)
     {
-      z = _pinr(tx_pin);
+      z = pinr(tx_pin);
       if (z != 0)
         return 0;
-      _waitus(50);
+      waitus(50);
     }
 
     return -1;
@@ -183,9 +183,9 @@ int serial_write(FILE *device, unsigned char *buff, int count)
 
     for (int i=0;i<count;i++)
     {
-      _wypin(tx_pin, b[i]);
-      while ((z = _pinr(tx_pin)) == 0)
-        _waitus(50);
+      wypin(tx_pin, b[i]);
+      while ((z = pinr(tx_pin)) == 0)
+        waitus(50);
     }
 
     return count;

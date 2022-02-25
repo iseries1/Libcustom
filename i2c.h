@@ -12,7 +12,12 @@
 #define I2C_FASTP 2
 #define I2C_HIGH 3
 
-typedef int* i2c_t;
+typedef struct 
+{
+    char clk;
+    char dta;
+    int wait;
+} i2c_t;
 
 /**
  * @brief Initilize i2c driver
@@ -87,7 +92,7 @@ int I2C_ReadData(i2c_t *x, unsigned char *data, int count);
  * @param count data bytes to read
  * @return amount read
  */
-int I2C_In(i2c_t *x, int address, int reg, int size, unsigned char *data, int count);
+int I2C_In(i2c_t *x, unsigned address, unsigned reg, unsigned size, unsigned char *data, int count);
 
 /**
  * @brief I2C Out
@@ -99,4 +104,4 @@ int I2C_In(i2c_t *x, int address, int reg, int size, unsigned char *data, int co
  * @param count data bytes to write
  * @return amount written
  */
-int I2C_Out(i2c_t *x, int address, int reg, int size, unsigned char *data, int count);
+int I2C_Out(i2c_t *x, unsigned address, unsigned reg, unsigned size, unsigned char *data, int count);

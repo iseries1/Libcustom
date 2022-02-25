@@ -27,7 +27,7 @@ int main()
   
   DS1302_open(MISO, CS, SCLK, MOSI);
     
-  _wait(1000);
+  wait(1000);
   
   m = DS1302_getWriteProtect();
   if (m)
@@ -71,7 +71,7 @@ int main()
   {
     time(&tm);
     printf("Date: %s", asctime(localtime(&tm)));
-   _wait(10000);
+    wait(10000);
   }
       
 }

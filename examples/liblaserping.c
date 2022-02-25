@@ -25,6 +25,6 @@ int main()
   {
     i = laserping_distance();
     printf("Distance: %d\n", i);
-    _wait(500);
+    wait(500);
   }  
 }

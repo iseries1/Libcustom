@@ -7,7 +7,7 @@
 */
 
 #include <stdio.h>
-#include <propeller2.h>
+#include <propeller.h>
 #include "Custom/bme280.h"
 #include "Custom/i2c.h"
 
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     
     while (1)
     {
-        _wait(1000);
+        wait(1000);
 	}
 }
 
@@ -98,7 +98,7 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
         rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, dev);
         /* Wait for the measurement to complete and print data @25Hz */
         dev->delay_us(req_delay, dev->intf_ptr);
-        _wait(1000);
+        wait(1000);
         rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, dev);
         print_sensor_data(&comp_data);
     }
@@ -139,7 +139,7 @@ int8_t stream_sensor_data_normal_mode(struct bme280_dev *dev)
 	while (1) {
 		/* Delay while the sensor completes a measurement */
 		dev->delay_us(70, dev->intf_ptr);
-		_wait(1000);
+		wait(1000);
 		rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, dev);
 		print_sensor_data(&comp_data);
 	}
@@ -175,5 +175,5 @@ BME280_INTF_RET_TYPE bme280Write(uint8_t reg_addr, uint8_t *data, uint16_t len, 
 
 void bme280Wait(uint32_t period, void *dev_id)
 {
-    _waitus(period);
+    waitus(period);
 }

@@ -35,6 +35,6 @@ int main(int argc, char** argv)
 
     while (1)
     {
-        _waitms(1000);
+        waitms(1000);
 	}
 }
