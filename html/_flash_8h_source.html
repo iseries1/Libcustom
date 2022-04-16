@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">P2LLVM Library Device Drivers
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
    <div id="projectbrief">Provide device driver that work on the P2 with LLVM</div>
   </td>
@@ -67,20 +67,26 @@ $(function() {
 <div class="title">Flash.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">int</span>* flash_t;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;flash_t* Flash_Init(<span class="keywordtype">int</span> MOSI, <span class="keywordtype">int</span> MISO, <span class="keywordtype">int</span> CLK, <span class="keywordtype">int</span> CS);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">void</span> Flash_Reset(flash_t *x);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">int</span> Flash_Busy(flash_t *x);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">int</span> Flash_Read(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> len);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">int</span> Flash_Write(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> len);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keywordtype">void</span> Flash_Erase(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">int</span> len);</div>
+<a href="_flash_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">int</span>* flash_t;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;flash_t* <a class="code" href="_flash_8h.html#a5a2191872f9bb569d68b72b58a6ec5fd">Flash_Init</a>(<span class="keywordtype">int</span> MOSI, <span class="keywordtype">int</span> MISO, <span class="keywordtype">int</span> CLK, <span class="keywordtype">int</span> CS);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_flash_8h.html#a8e9f38897778c8db384e27d2fbc766ac">Flash_Reset</a>(flash_t *x);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_flash_8h.html#a3fb3665be1324e6e8ca80de1541910a8">Flash_Busy</a>(flash_t *x);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_flash_8h.html#a20a511e79491d4a966f5015e4f952be5">Flash_Read</a>(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> len);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">int</span> <a class="code" href="_flash_8h.html#a921b899de2effc920051a914943f3fb8">Flash_Write</a>(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> len);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_flash_8h.html#a307bdfa25c46ce81dc15955ed4b75f6c">Flash_Erase</a>(flash_t *x, <span class="keywordtype">int</span> address, <span class="keywordtype">int</span> len);</div>
+<div class="ttc" id="a_flash_8h_html_a20a511e79491d4a966f5015e4f952be5"><div class="ttname"><a href="_flash_8h.html#a20a511e79491d4a966f5015e4f952be5">Flash_Read</a></div><div class="ttdeci">int Flash_Read(flash_t *x, int address, unsigned char *buffer, int len)</div><div class="ttdoc">Flash read.</div><div class="ttdef"><b>Definition:</b> Flash.c:82</div></div>
+<div class="ttc" id="a_flash_8h_html_a307bdfa25c46ce81dc15955ed4b75f6c"><div class="ttname"><a href="_flash_8h.html#a307bdfa25c46ce81dc15955ed4b75f6c">Flash_Erase</a></div><div class="ttdeci">void Flash_Erase(flash_t *x, int address, int len)</div><div class="ttdoc">Flash erase.</div><div class="ttdef"><b>Definition:</b> Flash.c:132</div></div>
+<div class="ttc" id="a_flash_8h_html_a3fb3665be1324e6e8ca80de1541910a8"><div class="ttname"><a href="_flash_8h.html#a3fb3665be1324e6e8ca80de1541910a8">Flash_Busy</a></div><div class="ttdeci">int Flash_Busy(flash_t *x)</div><div class="ttdoc">Flash busy.</div><div class="ttdef"><b>Definition:</b> Flash.c:64</div></div>
+<div class="ttc" id="a_flash_8h_html_a5a2191872f9bb569d68b72b58a6ec5fd"><div class="ttname"><a href="_flash_8h.html#a5a2191872f9bb569d68b72b58a6ec5fd">Flash_Init</a></div><div class="ttdeci">flash_t * Flash_Init(int MOSI, int MISO, int CLK, int CS)</div><div class="ttdoc">Initalize Flash Driver.</div><div class="ttdef"><b>Definition:</b> Flash.c:18</div></div>
+<div class="ttc" id="a_flash_8h_html_a8e9f38897778c8db384e27d2fbc766ac"><div class="ttname"><a href="_flash_8h.html#a8e9f38897778c8db384e27d2fbc766ac">Flash_Reset</a></div><div class="ttdeci">void Flash_Reset(flash_t *x)</div><div class="ttdoc">Flash reset.</div><div class="ttdef"><b>Definition:</b> Flash.c:44</div></div>
+<div class="ttc" id="a_flash_8h_html_a921b899de2effc920051a914943f3fb8"><div class="ttname"><a href="_flash_8h.html#a921b899de2effc920051a914943f3fb8">Flash_Write</a></div><div class="ttdeci">int Flash_Write(flash_t *x, int address, unsigned char *buffer, int len)</div><div class="ttdoc">Flash write.</div><div class="ttdef"><b>Definition:</b> Flash.c:102</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

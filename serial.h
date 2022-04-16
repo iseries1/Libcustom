@@ -1,10 +1,15 @@
+/**
+ * @file serial.h
+ * @author Michael Burmeister
+ * @brief Serial Driver
+ * @version 1.0
+ */
 
 #ifndef __SERIAL_H
 #define __SERIAL_H
 
 
 /**
- * @file serial.h
  * @brief Open a serial connection.
  * @param rxpin Serial input pin, receives serial data.
  * @param txpin Serial output pin, transmits serial data.
@@ -66,7 +71,7 @@ int serial_getcf(FILE *device);
 /**
  * @brief Read number of bytes from device
  * @param device file descriptor for serial connection
- * @param buffer to hold results
+ * @param buff to hold results
  * @param count number of bytes to read
  * @return size number of bytes read
  */

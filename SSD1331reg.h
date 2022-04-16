@@ -1,5 +1,4 @@
 /**
- * @file ssd1331reg.h
  * @brief Oled display register values
  * @author Michael Burmeister
  * @date December 11, 2018

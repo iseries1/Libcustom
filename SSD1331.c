@@ -10,9 +10,11 @@
 #include "SSD1331.h"
 #include "SSD1331reg.h"
 
+/** @cond */
 void _Shift_out(int, int, int, int);
 void SSD1331_cmd(unsigned char);
 void SSD1331_write(unsigned char);
+/** @endcond */
 
 // font 5x7 in 8x8 format line by line
 unsigned long Font_57[] = {0x1f1f1f1f, 0x1f1f1f1f, //0x0

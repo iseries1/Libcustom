@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['laserping_2eh_218',['laserping.h',['../laserping_8h.html',1,'']]],
-  ['lcd1602_2eh_219',['lcd1602.h',['../lcd1602_8h.html',1,'']]]
+  ['i2c_2eh_294',['i2c.h',['../i2c_8h.html',1,'']]],
+  ['ina260_2eh_295',['ina260.h',['../ina260_8h.html',1,'']]]
 ];

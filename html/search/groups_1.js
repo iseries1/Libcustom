@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['initialization_384',['Initialization',['../group__bme280_api_init.html',1,'']]]
+  ['initialization_532',['Initialization',['../group__bme280_api_init.html',1,'']]]
 ];

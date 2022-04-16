@@ -23,7 +23,7 @@ typedef struct
  * @brief Initilize i2c driver
  * @param scl i2c clock pin
  * @param sda i2c data pin
- * @param driver speed (I2C_STD, I2C_FAST, I2C_FASTP, I2C_HIGH)
+ * @param spd speed (I2C_STD, I2C_FAST, I2C_FASTP, I2C_HIGH)
  * @return driver connection
  */
 i2c_t *I2C_Init(int scl, int sda, int spd);
